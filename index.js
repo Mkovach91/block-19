@@ -49,13 +49,14 @@ const appendFreelancers = (freelancers) => {
     occupationList.append(occupationItem)
     priceList.append(priceItem)
   })
- 
 }
+
 let freelancerIndex = 0
+
 const freelanceInterval = setInterval(() =>{
   const ulname = document.querySelector(`#name-list`);
-  const ulocc = document.querySelector(`occupation-list`)
-  const ulprice = document.querySelector(`price-list`)
+  const ulocc = document.querySelector(`#occupation-list`)
+  const ulprice = document.querySelector(`#price-list`)
 
   if(freelancerIndex < freelancers.length) {
     const freelancer = freelancers[freelancerIndex];
@@ -74,23 +75,42 @@ const freelanceInterval = setInterval(() =>{
   if(freelancerIndex < freelancers.length) {
     const freelancer = freelancers[freelancerIndex];
     const li = document.createElement('li');
-    li.innerText = freelancer.price;
+    li.innerText = `$${freelancer.price}`;
     ulprice.append(li);
     freelancerIndex++;
   }
+  updateAverage ();
 
-
-
-  if(freelancerIndex >= 5){
+  if(freelancerIndex >= 8){
     clearInterval(freelanceInterval);}
-}, 
-5000);
 
 
+}, 5000);
+
+const updateAverage = () => {
+  const totalPrice = freelancers.reduce((sum, freelancer) => sum + freelancer.price, 0);
+  const averagePrice = totalPrice / freelancers.length;
+  const avgItem = document.querySelector(`#average`);
+  avgItem.innerText = `The average starting price is $${averagePrice.toFixed(2)}`;
+  
+  };
+  
+let freelancerAvg = 30;
+
+const freelanceAvg = setInterval (() => {
+  if(freelancerAvg < freelancers.length){
+    const freelancer = freelancers[freelancerAvg];
+    appendFreelancers([freelancer]);
+    freelancerAvg++;
+  }
+  else{
+    clearInterval(freelanceAvg);
+    updateAverage ();
+  }
+}, 5000);
 
 document.addEventListener(``, ()=>{
   appendFreelancers(freelancers);
 })
 
 console.log(freelanceInterval)
-
